@@ -31,7 +31,11 @@ def get_amount_of_pics(dir):
 def main():
     if len(sys.argv) != 2:
         print("Format [distrubition.py] [path to dir]")
+        exit(1)
     path_to = sys.argv[1]
+    if not os.path.isdir(path_to):
+        print(path_to + " is not a dir")
+        exit(1)
     files = get_all_dirs(path_to)
     if files == 0:
         print("Couldnt find any dirs inside")
@@ -42,11 +46,12 @@ def main():
     final_result = [r for r in result if r > 0]
     colors = plt.cm.viridis(np.linspace(0, 1, len(final_result)))
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(len(final_dirs) * 3, 7))
-    # ax2.figure(figsize=(len(final_dirs) * 2, len(final_dirs) * 1.5))
     ax2.bar(final_dirs, final_result, color=colors)
+    ax2.tick_params(axis='x', rotation=45)
+
     wedges, _, _ = ax1.pie(final_result, colors=colors, autopct='%1.1f%%')
     ax1.legend(wedges, final_dirs, title="Directories", loc="lower left",
-               bbox_to_anchor=(0, -0.1))
+               bbox_to_anchor=(-0.15, -0.15))
     plt.tight_layout()
     plt.show()
 
